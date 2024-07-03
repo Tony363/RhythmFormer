@@ -90,7 +90,7 @@ def test(config, data_loader_dict):
     if predictions is not None:
         torch.save(
             predictions, 
-            os.path.join(config.CACHED_PATH,'rppg','tensor_dict_nopreprocess.pth')
+            os.path.join(config.TEST.DATA.DATA_PATH,'rppg','tensor_dict_nopreprocess.pth')
         )
 
 
@@ -249,17 +249,16 @@ if __name__ == "__main__":
         def student_collate_fn(
             batches:list,
         )->tuple[torch.tensor,torch.tensor,list,list]:
-            batch_size = len(batches)
-            logger.info(f"BATCHSIZE - {batch_size}")
-            vid_dir = os.path.join(batches[0],"preprocessed_val")
-            processed_batches = os.listdir(vid_dir)
-            to_load = [os.path.join(vid_dir,file) for file in processed_batches[:batch_size]]
-            logger.info(f"LOADING - {[path.split(os.sep)[-1] for path in to_load]}")
+            processed_batches = os.listdir(batches[0])
+            to_load,vids = [],[]
+            for file in processed_batches[:min(len(processed_batches), 64)]:
+                to_load.append(os.path.join(batches[0],file))
+                vids.append(file.split('_')[-1].split('.npy')[0])
             batch = torch.stack([torch.from_numpy(np.load(file)) for file in to_load])
-            vids = [file.split('_')[-1].split('.npy')[0] for file in to_load]
             for file in to_load:
                 os.remove(file)
-            return batch,torch.ones(batch_size),to_load,vids
+            to_load = ['_'.join(path.split('_')[:-1]) for path in to_load]
+            return batch,torch.ones(len(to_load)),to_load,vids
 
         
         # Create and initialize the test dataloader given the correct toolbox mode,

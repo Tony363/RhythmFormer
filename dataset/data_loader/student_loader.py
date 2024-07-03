@@ -35,9 +35,6 @@ class StudentLoader(BaseLoader):
 
         """
         super().__init__(name, data_path, config_data)
-        if config_data.DATASET == "student":
-            self.inputs = self.get_raw_data(self.raw_data_path)
-            self.unprocessed_inputs = len(self.inputs)
             
     def preprocess_video(
         self, 
@@ -65,16 +62,15 @@ class StudentLoader(BaseLoader):
             pass
         else:
             raise ValueError('Unsupported Data Format!')
+        logger.info(f"{item_path}")
         logger.info(f"DATA SHAPE - {data.shape}")
-        
-        vid_dir = '/'.join(item_path.split(os.sep)[:-1])
+        self.unprocessed_inputs -= 1            
+
         filename = item_path.split(os.sep)[-1]
         for vid in range(data.shape[0]):
-            save_path = os.path.join(vid_dir,"processed","preprocessed_val",f"{filename.split('.mp4')[0]}_{vid}.npy")
+            save_path = os.path.join(self.config_data.CACHED_PATH,f"{filename.split('.mp4')[0]}_{vid}.npy")
             np.save(save_path, np.float32(data[vid]))
-            
-        self.__len__ = lambda: self.unprocessed_inputs + len(os.listdir(os.path.join(vid_dir,"processed","preprocessed_val")))
-        logger.info(f"BATCHES LEFT {self.__len__()}")
+        
         return self.config_data.CACHED_PATH
     
     def _getitem__(self, index):

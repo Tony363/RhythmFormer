@@ -62,6 +62,10 @@ class BaseLoader(Dataset):
         assert (config_data.BEGIN < config_data.END)
         assert (config_data.BEGIN > 0 or config_data.BEGIN == 0)
         assert (config_data.END < 1 or config_data.END == 1)
+        if config_data.DATASET == "student":
+            self.inputs = self.get_raw_data(self.raw_data_path)
+            self.unprocessed_inputs = len(self.inputs) - 1
+            return
         
         if config_data.DO_PREPROCESS:
             self.raw_data_dirs = self.get_raw_data(self.raw_data_path)
