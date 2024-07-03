@@ -1,0 +1,601 @@
+[logger|INFO|2024-07-02] Initializing ok.
+[logger|INFO|2024-07-02] Configuration:
+[logger|INFO|2024-07-02] BASE: ['']
+DEVICE: cuda:0
+INFERENCE:
+  BATCH_SIZE: 4
+  EVALUATION_METHOD: FFT
+  EVALUATION_WINDOW:
+    USE_SMALLER_WINDOW: False
+    WINDOW_SIZE: 10
+  MODEL_PATH: PreTrainedModels/UBFC_cross_RhythmFormer.pth
+LOG:
+  PATH: runs/exp/UBFC-rPPG_SizeW128_SizeH128_ClipLength160_DataTypeStandardized_DataAugNone_LabelTypeStandardized_Crop_faceTrue_Large_boxTrue_Large_size1.5_Dyamic_DetFalse_det_len30_Median_face_boxFalse
+MODEL:
+  BIGSMALL:
+    FRAME_DEPTH: 3
+  DROP_RATE: 0.2
+  EFFICIENTPHYS:
+    FRAME_DEPTH: 10
+  MODEL_DIR: ../PreTrainedModels/UBFC-rPPG_SizeW128_SizeH128_ClipLength160_DataTypeStandardized_DataAugNone_LabelTypeStandardized_Crop_faceTrue_Large_boxTrue_Large_size1.5_Dyamic_DetFalse_det_len30_Median_face_boxFalse
+  NAME: RhythmFormer
+  PHYSFORMER:
+    DIM: 96
+    FF_DIM: 144
+    NUM_HEADS: 4
+    NUM_LAYERS: 12
+    PATCH_SIZE: 4
+    THETA: 0.7
+  PHYSNET:
+    FRAME_NUM: 160
+  RESUME: 
+  TSCAN:
+    FRAME_DEPTH: 10
+NUM_OF_GPU_TRAIN: 1
+TEST:
+  DATA:
+    BEGIN: 0.0
+    CACHED_PATH: /home/tony/engagenet_val/processed
+    DATASET: student
+    DATA_FORMAT: NDCHW
+    DATA_PATH: /home/tony/engagenet_val
+    DO_PREPROCESS: False
+    END: 1.0
+    EXP_DATA_NAME: student_SizeW128_SizeH128_ClipLength160_DataTypeStandardized_DataAugNone_LabelTypeStandardized_Crop_faceTrue_Large_boxTrue_Large_size1.5_Dyamic_DetFalse_det_len30_Median_face_boxFalse
+    FILE_LIST_PATH: /home/tony/engagenet_val/processed/DataFileLists/student_SizeW128_SizeH128_ClipLength160_DataTypeStandardized_DataAugNone_LabelTypeStandardized_Crop_faceTrue_Large_boxTrue_Large_size1.5_Dyamic_DetFalse_det_len30_Median_face_boxFalse_0.0_1.0.csv
+    FILTERING:
+      EXCLUSION_LIST: ['']
+      SELECT_TASKS: False
+      TASK_LIST: ['']
+      USE_EXCLUSION_LIST: False
+    FOLD:
+      FOLD_NAME: 
+      FOLD_PATH: 
+    FS: 30
+    INFO:
+      EXERCISE: [1, 2]
+      GENDER: [1, 2]
+      GLASSER: [1, 2]
+      HAIR_COVER: [1, 2]
+      LIGHT: [1, 2, 3, 4]
+      MAKEUP: [1, 2]
+      MOTION: [1, 2, 3, 4]
+      SKIN_COLOR: [3, 4, 5, 6]
+    PREPROCESS:
+      BIGSMALL:
+        BIG_DATA_TYPE: ['']
+        RESIZE:
+          BIG_H: 144
+          BIG_W: 144
+          SMALL_H: 9
+          SMALL_W: 9
+        SMALL_DATA_TYPE: ['']
+      CHUNK_LENGTH: 160
+      CROP_FACE:
+        DETECTION:
+          DO_DYNAMIC_DETECTION: False
+          DYNAMIC_DETECTION_FREQUENCY: 30
+          USE_MEDIAN_FACE_BOX: False
+        DO_CROP_FACE: True
+        LARGE_BOX_COEF: 1.5
+        USE_LARGE_FACE_BOX: True
+      DATA_AUG: ['None']
+      DATA_TYPE: ['Standardized']
+      DO_CHUNK: True
+      LABEL_TYPE: Standardized
+      RESIZE:
+        H: 128
+        W: 128
+      USE_PSUEDO_PPG_LABEL: False
+  METRICS: ['MAE', 'RMSE', 'MAPE', 'Pearson', 'SNR']
+  OUTPUT_SAVE_DIR: 
+  USE_LAST_EPOCH: False
+TOOLBOX_MODE: only_test_student
+TRAIN:
+  AUG: 0
+  BATCH_SIZE: 4
+  DATA:
+    BEGIN: 0.0
+    CACHED_PATH: ../dataset/UBFC/UBFC-rPPG_SizeW128_SizeH128_ClipLength160_DataTypeStandardized_DataAugNone_LabelTypeStandardized_Crop_faceTrue_Large_boxTrue_Large_size1.5_Dyamic_DetFalse_det_len30_Median_face_boxFalse
+    DATASET: UBFC-rPPG
+    DATA_FORMAT: NDCHW
+    DATA_PATH: ../../../space/user/DataSet/UBFC/
+    DO_PREPROCESS: False
+    END: 0.8
+    EXP_DATA_NAME: UBFC-rPPG_SizeW128_SizeH128_ClipLength160_DataTypeStandardized_DataAugNone_LabelTypeStandardized_Crop_faceTrue_Large_boxTrue_Large_size1.5_Dyamic_DetFalse_det_len30_Median_face_boxFalse
+    FILE_LIST_PATH: ../dataset/UBFC/DataFileLists/UBFC-rPPG_SizeW128_SizeH128_ClipLength160_DataTypeStandardized_DataAugNone_LabelTypeStandardized_Crop_faceTrue_Large_boxTrue_Large_size1.5_Dyamic_DetFalse_det_len30_Median_face_boxFalse_0.0_0.8.csv
+    FILTERING:
+      EXCLUSION_LIST: ['']
+      SELECT_TASKS: False
+      TASK_LIST: ['']
+      USE_EXCLUSION_LIST: False
+    FOLD:
+      FOLD_NAME: 
+      FOLD_PATH: 
+    FS: 30
+    INFO:
+      EXERCISE: [True]
+      GENDER: ['']
+      GLASSER: [True]
+      HAIR_COVER: [True]
+      LIGHT: ['']
+      MAKEUP: [True]
+      MOTION: ['']
+      SKIN_COLOR: [1]
+    PREPROCESS:
+      BIGSMALL:
+        BIG_DATA_TYPE: ['']
+        RESIZE:
+          BIG_H: 144
+          BIG_W: 144
+          SMALL_H: 9
+          SMALL_W: 9
+        SMALL_DATA_TYPE: ['']
+      CHUNK_LENGTH: 160
+      CROP_FACE:
+        DETECTION:
+          DO_DYNAMIC_DETECTION: False
+          DYNAMIC_DETECTION_FREQUENCY: 30
+          USE_MEDIAN_FACE_BOX: False
+        DO_CROP_FACE: True
+        LARGE_BOX_COEF: 1.5
+        USE_LARGE_FACE_BOX: True
+      DATA_AUG: ['None']
+      DATA_TYPE: ['Standardized']
+      DO_CHUNK: True
+      LABEL_TYPE: Standardized
+      RESIZE:
+        H: 128
+        W: 128
+      USE_PSUEDO_PPG_LABEL: False
+  EPOCHS: 30
+  LR: 0.009
+  MODEL_FILE_NAME: UBFC_MMPD_RhythmFormer
+  OPTIMIZER:
+    BETAS: (0.9, 0.999)
+    EPS: 0.0001
+    MOMENTUM: 0.9
+UNSUPERVISED:
+  DATA:
+    BEGIN: 0.0
+    CACHED_PATH: PreprocessedData/_SizeW128_SizeH128_ClipLength160_DataType_DataAugNone_LabelType_Crop_faceTrue_Large_boxTrue_Large_size1.5_Dyamic_DetFalse_det_len30_Median_face_boxFalse_unsupervised
+    DATASET: 
+    DATA_FORMAT: NDCHW
+    DATA_PATH: 
+    DO_PREPROCESS: False
+    END: 1.0
+    EXP_DATA_NAME: _SizeW128_SizeH128_ClipLength160_DataType_DataAugNone_LabelType_Crop_faceTrue_Large_boxTrue_Large_size1.5_Dyamic_DetFalse_det_len30_Median_face_boxFalse_unsupervised
+    FILE_LIST_PATH: PreprocessedData/DataFileLists/_SizeW128_SizeH128_ClipLength160_DataType_DataAugNone_LabelType_Crop_faceTrue_Large_boxTrue_Large_size1.5_Dyamic_DetFalse_det_len30_Median_face_boxFalse_unsupervised_0.0_1.0.csv
+    FILTERING:
+      EXCLUSION_LIST: ['']
+      SELECT_TASKS: False
+      TASK_LIST: ['']
+      USE_EXCLUSION_LIST: False
+    FOLD:
+      FOLD_NAME: 
+      FOLD_PATH: 
+    FS: 0
+    INFO:
+      EXERCISE: [True]
+      GENDER: ['']
+      GLASSER: [True]
+      HAIR_COVER: [True]
+      LIGHT: ['']
+      MAKEUP: [True]
+      MOTION: ['']
+      SKIN_COLOR: [1]
+    PREPROCESS:
+      CHUNK_LENGTH: 160
+      CROP_FACE:
+        DETECTION:
+          DO_DYNAMIC_DETECTION: False
+          DYNAMIC_DETECTION_FREQUENCY: 30
+          USE_MEDIAN_FACE_BOX: False
+        DO_CROP_FACE: True
+        LARGE_BOX_COEF: 1.5
+        USE_LARGE_FACE_BOX: True
+      DATA_AUG: ['None']
+      DATA_TYPE: ['']
+      DO_CHUNK: True
+      LABEL_TYPE: 
+      RESIZE:
+        H: 128
+        W: 128
+      USE_PSUEDO_PPG_LABEL: False
+  METHOD: []
+  METRICS: []
+VALID:
+  DATA:
+    BEGIN: 0.8
+    CACHED_PATH: ../dataset/UBFC/UBFC-rPPG_SizeW128_SizeH128_ClipLength160_DataTypeStandardized_DataAugNone_LabelTypeStandardized_Crop_faceTrue_Large_boxTrue_Large_size1.5_Dyamic_DetFalse_det_len30_Median_face_boxFalse
+    DATASET: UBFC-rPPG
+    DATA_FORMAT: NDCHW
+    DATA_PATH: ../../../space/user/DataSet/UBFC/
+    DO_PREPROCESS: True
+    END: 1.0
+    EXP_DATA_NAME: UBFC-rPPG_SizeW128_SizeH128_ClipLength160_DataTypeStandardized_DataAugNone_LabelTypeStandardized_Crop_faceTrue_Large_boxTrue_Large_size1.5_Dyamic_DetFalse_det_len30_Median_face_boxFalse
+    FILE_LIST_PATH: ../dataset/UBFC/DataFileLists/UBFC-rPPG_SizeW128_SizeH128_ClipLength160_DataTypeStandardized_DataAugNone_LabelTypeStandardized_Crop_faceTrue_Large_boxTrue_Large_size1.5_Dyamic_DetFalse_det_len30_Median_face_boxFalse_0.8_1.0.csv
+    FILTERING:
+      EXCLUSION_LIST: ['']
+      SELECT_TASKS: False
+      TASK_LIST: ['']
+      USE_EXCLUSION_LIST: False
+    FOLD:
+      FOLD_NAME: 
+      FOLD_PATH: 
+    FS: 30
+    INFO:
+      EXERCISE: [True]
+      GENDER: ['']
+      GLASSER: [True]
+      HAIR_COVER: [True]
+      LIGHT: ['']
+      MAKEUP: [True]
+      MOTION: ['']
+      SKIN_COLOR: [1]
+    PREPROCESS:
+      BIGSMALL:
+        BIG_DATA_TYPE: ['']
+        RESIZE:
+          BIG_H: 144
+          BIG_W: 144
+          SMALL_H: 9
+          SMALL_W: 9
+        SMALL_DATA_TYPE: ['']
+      CHUNK_LENGTH: 160
+      CROP_FACE:
+        DETECTION:
+          DO_DYNAMIC_DETECTION: False
+          DYNAMIC_DETECTION_FREQUENCY: 30
+          USE_MEDIAN_FACE_BOX: False
+        DO_CROP_FACE: True
+        LARGE_BOX_COEF: 1.5
+        USE_LARGE_FACE_BOX: True
+      DATA_AUG: ['None']
+      DATA_TYPE: ['Standardized']
+      DO_CHUNK: True
+      LABEL_TYPE: Standardized
+      RESIZE:
+        H: 128
+        W: 128
+      USE_PSUEDO_PPG_LABEL: False
+[logger|INFO|2024-07-02] Cached Data Path /home/tony/engagenet_val/processed
+[logger|INFO|2024-07-02] File List Path /home/tony/engagenet_val/processed/DataFileLists/student_SizeW128_SizeH128_ClipLength160_DataTypeStandardized_DataAugNone_LabelTypeStandardized_Crop_faceTrue_Large_boxTrue_Large_size1.5_Dyamic_DetFalse_det_len30_Median_face_boxFalse_0.0_1.0.csv
+[logger|INFO|2024-07-02]  test Preprocessed Dataset Length: 9092
+[logger|INFO|2024-07-02] 
+[logger|INFO|2024-07-02] ===Student_Testing===
+[logger|INFO|2024-07-02] LOADED MODEL
+[logger|INFO|2024-07-02] Testing uses pretrained model!
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1072
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1073
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1074
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1075
+[logger|INFO|2024-07-02] BATCHSIZE - 4
+[logger|INFO|2024-07-02] LOADING - ['subject_122_g0eklav32n_vid_0_1_0.npy', 'subject_122_g0eklav32n_vid_0_10_0.npy', 'subject_122_g0eklav32n_vid_0_11_0.npy', 'subject_122_g0eklav32n_vid_0_0_0.npy']
+[logger|INFO|2024-07-02] Warning: More than one faces are detected(Only cropping the biggest one.)
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1072
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1073
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1074
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1075
+[logger|INFO|2024-07-02] BATCHSIZE - 4
+[logger|INFO|2024-07-02] LOADING - ['subject_122_g0eklav32n_vid_0_15_0.npy', 'subject_122_g0eklav32n_vid_0_12_0.npy', 'subject_122_g0eklav32n_vid_0_14_0.npy', 'subject_122_g0eklav32n_vid_0_13_0.npy']
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1072
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1073
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1074
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1075
+[logger|INFO|2024-07-02] BATCHSIZE - 4
+[logger|INFO|2024-07-02] LOADING - ['subject_122_g0eklav32n_vid_0_19_0.npy', 'subject_122_g0eklav32n_vid_0_18_0.npy', 'subject_122_g0eklav32n_vid_0_16_0.npy', 'subject_122_g0eklav32n_vid_0_17_0.npy']
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1072
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1073
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1074
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1075
+[logger|INFO|2024-07-02] BATCHSIZE - 4
+[logger|INFO|2024-07-02] LOADING - ['subject_122_g0eklav32n_vid_0_20_0.npy', 'subject_122_g0eklav32n_vid_0_22_0.npy', 'subject_122_g0eklav32n_vid_0_2_0.npy', 'subject_122_g0eklav32n_vid_0_21_0.npy']
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1072
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1073
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1074
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1075
+[logger|INFO|2024-07-02] BATCHSIZE - 4
+[logger|INFO|2024-07-02] LOADING - ['subject_122_g0eklav32n_vid_0_23_0.npy', 'subject_122_g0eklav32n_vid_0_24_0.npy', 'subject_122_g0eklav32n_vid_0_26_0.npy', 'subject_122_g0eklav32n_vid_0_25_0.npy']
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1072
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1073
+[logger|INFO|2024-07-02] Warning: More than one faces are detected(Only cropping the biggest one.)
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1074
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1075
+[logger|INFO|2024-07-02] BATCHSIZE - 4
+[logger|INFO|2024-07-02] LOADING - ['subject_122_g0eklav32n_vid_0_3_0.npy', 'subject_122_g0eklav32n_vid_0_29_0.npy', 'subject_122_g0eklav32n_vid_0_27_0.npy', 'subject_122_g0eklav32n_vid_0_28_0.npy']
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1072
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1073
+[logger|INFO|2024-07-02] Warning: More than one faces are detected(Only cropping the biggest one.)
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1074
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1075
+[logger|INFO|2024-07-02] BATCHSIZE - 4
+[logger|INFO|2024-07-02] LOADING - ['subject_122_g0eklav32n_vid_0_31_0.npy', 'subject_122_g0eklav32n_vid_0_33_0.npy', 'subject_122_g0eklav32n_vid_0_32_0.npy', 'subject_122_g0eklav32n_vid_0_30_0.npy']
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1072
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1073
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1074
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1075
+[logger|INFO|2024-07-02] BATCHSIZE - 4
+[logger|INFO|2024-07-02] LOADING - ['subject_122_g0eklav32n_vid_0_4_0.npy', 'subject_122_g0eklav32n_vid_0_5_0.npy', 'subject_122_g0eklav32n_vid_0_6_0.npy', 'subject_122_g0eklav32n_vid_0_7_0.npy']
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1072
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1073
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1074
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1075
+[logger|INFO|2024-07-02] BATCHSIZE - 4
+[logger|INFO|2024-07-02] LOADING - ['subject_122_g0eklav32n_vid_1_0_0.npy', 'subject_122_g0eklav32n_vid_1_1_0.npy', 'subject_122_g0eklav32n_vid_0_9_0.npy', 'subject_122_g0eklav32n_vid_0_8_0.npy']
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1072
+[logger|INFO|2024-07-02] Warning: More than one faces are detected(Only cropping the biggest one.)
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1073
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1074
+[logger|INFO|2024-07-02] Warning: More than one faces are detected(Only cropping the biggest one.)
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1075
+[logger|INFO|2024-07-02] BATCHSIZE - 4
+[logger|INFO|2024-07-02] LOADING - ['subject_122_g0eklav32n_vid_1_13_0.npy', 'subject_122_g0eklav32n_vid_1_12_0.npy', 'subject_122_g0eklav32n_vid_1_10_0.npy', 'subject_122_g0eklav32n_vid_1_11_0.npy']
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1072
+[logger|INFO|2024-07-02] Warning: More than one faces are detected(Only cropping the biggest one.)
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1073
+[logger|INFO|2024-07-02] Warning: More than one faces are detected(Only cropping the biggest one.)
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1074
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1075
+[logger|INFO|2024-07-02] BATCHSIZE - 4
+[logger|INFO|2024-07-02] LOADING - ['subject_122_g0eklav32n_vid_1_14_0.npy', 'subject_122_g0eklav32n_vid_1_16_0.npy', 'subject_122_g0eklav32n_vid_1_15_0.npy', 'subject_122_g0eklav32n_vid_1_17_0.npy']
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1072
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1073
+[logger|INFO|2024-07-02] Warning: More than one faces are detected(Only cropping the biggest one.)
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1074
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1075
+[logger|INFO|2024-07-02] BATCHSIZE - 4
+[logger|INFO|2024-07-02] LOADING - ['subject_122_g0eklav32n_vid_1_2_0.npy', 'subject_122_g0eklav32n_vid_1_18_0.npy', 'subject_122_g0eklav32n_vid_1_20_0.npy', 'subject_122_g0eklav32n_vid_1_19_0.npy']
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1072
+[logger|INFO|2024-07-02] Warning: More than one faces are detected(Only cropping the biggest one.)
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1073
+[logger|INFO|2024-07-02] Warning: More than one faces are detected(Only cropping the biggest one.)
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1074
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1075
+[logger|INFO|2024-07-02] BATCHSIZE - 4
+[logger|INFO|2024-07-02] LOADING - ['subject_122_g0eklav32n_vid_1_22_0.npy', 'subject_122_g0eklav32n_vid_1_24_0.npy', 'subject_122_g0eklav32n_vid_1_23_0.npy', 'subject_122_g0eklav32n_vid_1_21_0.npy']
+[logger|INFO|2024-07-02] Warning: More than one faces are detected(Only cropping the biggest one.)
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1072
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1073
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1074
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1075
+[logger|INFO|2024-07-02] BATCHSIZE - 4
+[logger|INFO|2024-07-02] LOADING - ['subject_122_g0eklav32n_vid_1_25_0.npy', 'subject_122_g0eklav32n_vid_1_27_0.npy', 'subject_122_g0eklav32n_vid_1_26_0.npy', 'subject_122_g0eklav32n_vid_1_28_0.npy']
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1072
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1073
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1074
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1075
+[logger|INFO|2024-07-02] BATCHSIZE - 4
+[logger|INFO|2024-07-02] LOADING - ['subject_122_g0eklav32n_vid_1_30_0.npy', 'subject_122_g0eklav32n_vid_1_31_0.npy', 'subject_122_g0eklav32n_vid_1_29_0.npy', 'subject_122_g0eklav32n_vid_1_3_0.npy']
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1072
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1073
+[logger|INFO|2024-07-02] NO VIDEOS PROCESSED - 0
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1074
+[logger|INFO|2024-07-02] BATCHSIZE - 4
+[logger|INFO|2024-07-02] LOADING - ['subject_122_g0eklav32n_vid_1_4_0.npy', 'subject_122_g0eklav32n_vid_1_33_0.npy', 'subject_122_g0eklav32n_vid_1_32_0.npy']
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1072
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1073
+[logger|INFO|2024-07-02] Warning: More than one faces are detected(Only cropping the biggest one.)
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1074
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1075
+[logger|INFO|2024-07-02] BATCHSIZE - 4
+[logger|INFO|2024-07-02] LOADING - ['subject_122_g0eklav32n_vid_1_8_0.npy', 'subject_122_g0eklav32n_vid_1_7_0.npy', 'subject_122_g0eklav32n_vid_1_6_0.npy', 'subject_122_g0eklav32n_vid_1_5_0.npy']
+[logger|INFO|2024-07-02] Warning: More than one faces are detected(Only cropping the biggest one.)
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1072
+[logger|INFO|2024-07-02] Warning: More than one faces are detected(Only cropping the biggest one.)
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1073
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1074
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1075
+[logger|INFO|2024-07-02] BATCHSIZE - 4
+[logger|INFO|2024-07-02] LOADING - ['subject_122_g0eklav32n_vid_1_9_0.npy', 'subject_122_g0eklav32n_vid_2_1_0.npy', 'subject_122_g0eklav32n_vid_2_10_0.npy', 'subject_122_g0eklav32n_vid_2_0_0.npy']
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1072
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1073
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1074
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1075
+[logger|INFO|2024-07-02] BATCHSIZE - 4
+[logger|INFO|2024-07-02] LOADING - ['subject_122_g0eklav32n_vid_2_14_0.npy', 'subject_122_g0eklav32n_vid_2_13_0.npy', 'subject_122_g0eklav32n_vid_2_12_0.npy', 'subject_122_g0eklav32n_vid_2_11_0.npy']
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1072
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1073
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1074
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1075
+[logger|INFO|2024-07-02] BATCHSIZE - 4
+[logger|INFO|2024-07-02] LOADING - ['subject_122_g0eklav32n_vid_2_16_0.npy', 'subject_122_g0eklav32n_vid_2_15_0.npy', 'subject_122_g0eklav32n_vid_2_18_0.npy', 'subject_122_g0eklav32n_vid_2_17_0.npy']
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1072
+[logger|INFO|2024-07-02] Warning: More than one faces are detected(Only cropping the biggest one.)
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1073
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1074
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1075
+[logger|INFO|2024-07-02] BATCHSIZE - 4
+[logger|INFO|2024-07-02] LOADING - ['subject_122_g0eklav32n_vid_2_2_0.npy', 'subject_122_g0eklav32n_vid_2_20_0.npy', 'subject_122_g0eklav32n_vid_2_19_0.npy', 'subject_122_g0eklav32n_vid_2_21_0.npy']
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1072
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1073
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1074
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1075
+[logger|INFO|2024-07-02] BATCHSIZE - 4
+[logger|INFO|2024-07-02] LOADING - ['subject_122_g0eklav32n_vid_2_22_0.npy', 'subject_122_g0eklav32n_vid_2_24_0.npy', 'subject_122_g0eklav32n_vid_2_23_0.npy', 'subject_122_g0eklav32n_vid_2_25_0.npy']
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1072
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1073
+[logger|INFO|2024-07-02] Warning: More than one faces are detected(Only cropping the biggest one.)
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1074
+[logger|INFO|2024-07-02] Warning: More than one faces are detected(Only cropping the biggest one.)
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1075
+[logger|INFO|2024-07-02] BATCHSIZE - 4
+[logger|INFO|2024-07-02] LOADING - ['subject_122_g0eklav32n_vid_2_26_0.npy', 'subject_122_g0eklav32n_vid_2_29_0.npy', 'subject_122_g0eklav32n_vid_2_28_0.npy', 'subject_122_g0eklav32n_vid_2_27_0.npy']
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1072
+[logger|INFO|2024-07-02] Warning: More than one faces are detected(Only cropping the biggest one.)
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1073
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1074
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1075
+[logger|INFO|2024-07-02] BATCHSIZE - 4
+[logger|INFO|2024-07-02] LOADING - ['subject_122_g0eklav32n_vid_2_32_0.npy', 'subject_122_g0eklav32n_vid_2_3_0.npy', 'subject_122_g0eklav32n_vid_2_31_0.npy', 'subject_122_g0eklav32n_vid_2_30_0.npy']
+[logger|INFO|2024-07-02] Warning: More than one faces are detected(Only cropping the biggest one.)
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1072
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1073
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1074
+[logger|INFO|2024-07-02] ERROR: No Face Detected
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1075
+[logger|INFO|2024-07-02] BATCHSIZE - 4
+[logger|INFO|2024-07-02] LOADING - ['subject_122_g0eklav32n_vid_2_4_0.npy', 'subject_122_g0eklav32n_vid_2_7_0.npy', 'subject_122_g0eklav32n_vid_2_5_0.npy', 'subject_122_g0eklav32n_vid_2_6_0.npy']
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1072
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1073
+[logger|INFO|2024-07-02] Warning: More than one faces are detected(Only cropping the biggest one.)
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1074
+[logger|INFO|2024-07-02] Warning: More than one faces are detected(Only cropping the biggest one.)
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1075
+[logger|INFO|2024-07-02] BATCHSIZE - 4
+[logger|INFO|2024-07-02] LOADING - ['subject_122_g0eklav32n_vid_2_9_0.npy', 'subject_122_g0eklav32n_vid_2_8_0.npy', 'subject_125_acuvjvqpr0_vid_0_1_0.npy', 'subject_125_acuvjvqpr0_vid_0_0_0.npy']
+[logger|INFO|2024-07-02] Warning: More than one faces are detected(Only cropping the biggest one.)
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1072
+[logger|INFO|2024-07-02] Warning: More than one faces are detected(Only cropping the biggest one.)
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1073
+[logger|INFO|2024-07-02] Warning: More than one faces are detected(Only cropping the biggest one.)
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1074
+[logger|INFO|2024-07-02] Warning: More than one faces are detected(Only cropping the biggest one.)
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1075
+[logger|INFO|2024-07-02] BATCHSIZE - 4
+[logger|INFO|2024-07-02] LOADING - ['subject_125_acuvjvqpr0_vid_0_11_0.npy', 'subject_125_acuvjvqpr0_vid_0_10_0.npy', 'subject_125_acuvjvqpr0_vid_0_12_0.npy', 'subject_125_acuvjvqpr0_vid_0_13_0.npy']
+[logger|INFO|2024-07-02] Warning: More than one faces are detected(Only cropping the biggest one.)
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)
+[logger|INFO|2024-07-02] BATCHES LEFT 1072
+[logger|INFO|2024-07-02] Warning: More than one faces are detected(Only cropping the biggest one.)
+[logger|INFO|2024-07-02] DATA SHAPE - (1, 160, 3, 128, 128)

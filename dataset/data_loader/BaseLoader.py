@@ -15,14 +15,14 @@ from scipy import sparse
 from unsupervised_methods.methods import POS_WANG
 from unsupervised_methods import utils
 import math
-from multiprocessing import Pool, Process, Value, Array, Manager
+from multiprocessing import Pool, Process, Value, Array, Manager,Lock
 
 import cv2
 import numpy as np
 import pandas as pd
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, IterableDataset
 from tqdm import tqdm
-
+from utils import logger
 
 class BaseLoader(Dataset):
     """The base class for data loading based on pytorch Dataset.
@@ -62,23 +62,24 @@ class BaseLoader(Dataset):
         assert (config_data.BEGIN < config_data.END)
         assert (config_data.BEGIN > 0 or config_data.BEGIN == 0)
         assert (config_data.END < 1 or config_data.END == 1)
+        
         if config_data.DO_PREPROCESS:
             self.raw_data_dirs = self.get_raw_data(self.raw_data_path)
             self.preprocess_dataset(self.raw_data_dirs, config_data.PREPROCESS, config_data.BEGIN, config_data.END)
         else:
             if not os.path.exists(self.cached_path):
-                print('CACHED_PATH:', self.cached_path)
+                logger.info('CACHED_PATH:', self.cached_path)
                 raise ValueError(self.dataset_name,
                                 'Please set DO_PREPROCESS to True. Preprocessed directory does not exist!')
             if not os.path.exists(self.file_list_path):
-                print('File list does not exist... generating now...')
+                logger.info('File list does not exist... generating now...')
                 self.raw_data_dirs = self.get_raw_data(self.raw_data_path)
                 self.build_file_list_retroactive(self.raw_data_dirs, config_data.BEGIN, config_data.END)
-                print('File list generated.', end='\n\n')
+                logger.info('File list generated.')
             self.load_preprocessed_data()
-        print('Cached Data Path', self.cached_path, end='\n\n')
-        print('File List Path', self.file_list_path)
-        print(f" {self.dataset_name} Preprocessed Dataset Length: {self.preprocessed_data_len}", end='\n\n')
+        logger.info(f"Cached Data Path {self.cached_path}")
+        logger.info(f"File List Path {self.file_list_path}")
+        logger.info(f" {self.dataset_name} Preprocessed Dataset Length: {self.preprocessed_data_len}")
 
     def __len__(self):
         """Returns the length of the dataset."""
@@ -206,7 +207,7 @@ class BaseLoader(Dataset):
         file_list_dict = self.multi_process_manager(data_dirs_split, config_preprocess) 
         self.build_file_list(file_list_dict)  # build file list
         self.load_preprocessed_data()  # load all data and corresponding labels (sorted for consistency)
-        print("Total Number of raw files preprocessed:", len(data_dirs_split), end='\n\n')
+        logger.info(f"Total Number of raw files preprocessed:{len(data_dirs_split)}")
 
     def preprocess(self, frames, bvps, config_preprocess):
         """Preprocesses a pair of data.
@@ -276,12 +277,12 @@ class BaseLoader(Dataset):
            './dataset/haarcascade_frontalface_default.xml')
         face_zone = detector.detectMultiScale(frame)
         if len(face_zone) < 1:
-            print("ERROR: No Face Detected")
+            logger.info("ERROR: No Face Detected")
             face_box_coor = [0, 0, frame.shape[0], frame.shape[1]]
         elif len(face_zone) >= 2:
             face_box_coor = np.argmax(face_zone, axis=0)
             face_box_coor = face_zone[face_box_coor[2]]
-            print("Warning: More than one faces are detected(Only cropping the biggest one.)")
+            logger.info("Warning: More than one faces are detected(Only cropping the biggest one.)")
         else:
             face_box_coor = face_zone[0]
         if use_larger_box:
@@ -425,7 +426,7 @@ class BaseLoader(Dataset):
         Returns:
             file_list_dict(Dict): Dictionary containing information regarding processed data ( path names)
         """
-        print('Preprocessing dataset...')
+        logger.info('Preprocessing dataset...')
         file_num = len(data_dirs)
         choose_range = range(0, file_num)
         pbar = tqdm(list(choose_range))
@@ -435,6 +436,7 @@ class BaseLoader(Dataset):
         file_list_dict = manager.dict()  # dictionary for all processes to store processed files
         p_list = []  # list of processes
         running_num = 0  # number of running processes
+        lock = Lock()
 
         # in range of number of files to process
         for i in choose_range:
@@ -443,7 +445,7 @@ class BaseLoader(Dataset):
                 if running_num < multi_process_quota:  # in case of too many processes
                     # send data to be preprocessing task
                     p = Process(target=self.preprocess_dataset_subprocess, 
-                                args=(data_dirs,config_preprocess, i, file_list_dict))
+                                args=(data_dirs,config_preprocess, i, file_list_dict,lock))
                     p.start()
                     p_list.append(p)
                     running_num += 1
