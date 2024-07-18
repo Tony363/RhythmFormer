@@ -20,9 +20,10 @@ from multiprocessing import Pool, Process, Value, Array, Manager,Lock
 import cv2
 import numpy as np
 import pandas as pd
-from torch.utils.data import Dataset, IterableDataset
+from torch.utils.data import Dataset
 from tqdm import tqdm
 from utils import logger
+
 
 class BaseLoader(Dataset):
     """The base class for data loading based on pytorch Dataset.
@@ -62,7 +63,8 @@ class BaseLoader(Dataset):
         assert (config_data.BEGIN < config_data.END)
         assert (config_data.BEGIN > 0 or config_data.BEGIN == 0)
         assert (config_data.END < 1 or config_data.END == 1)
-        if config_data.DATASET == "student":
+        
+        if config_data.DATASET == "student" and not config_data.DO_PREPROCESS:
             self.inputs = self.get_raw_data(self.raw_data_path)
             self.unprocessed_inputs = len(self.inputs) - 1
             return
@@ -72,7 +74,7 @@ class BaseLoader(Dataset):
             self.preprocess_dataset(self.raw_data_dirs, config_data.PREPROCESS, config_data.BEGIN, config_data.END)
         else:
             if not os.path.exists(self.cached_path):
-                logger.info('CACHED_PATH:', self.cached_path)
+                logger.info(f'CACHED_PATH: {self.cached_path}')
                 raise ValueError(self.dataset_name,
                                 'Please set DO_PREPROCESS to True. Preprocessed directory does not exist!')
             if not os.path.exists(self.file_list_path):
@@ -81,8 +83,8 @@ class BaseLoader(Dataset):
                 self.build_file_list_retroactive(self.raw_data_dirs, config_data.BEGIN, config_data.END)
                 logger.info('File list generated.')
             self.load_preprocessed_data()
-        logger.info(f"Cached Data Path {self.cached_path}")
-        logger.info(f"File List Path {self.file_list_path}")
+        logger.info(f'Cached Data Path {self.cached_path}')
+        logger.info(f'File List Path {self.file_list_path}')
         logger.info(f" {self.dataset_name} Preprocessed Dataset Length: {self.preprocessed_data_len}")
 
     def __len__(self):
@@ -206,12 +208,15 @@ class BaseLoader(Dataset):
             begin(float): index of begining during train/val split.
             end(float): index of ending during train/val split.
         """
-        data_dirs_split = self.split_raw_data(data_dirs, begin, end)  # partition dataset 
         # send data directories to be processed
-        file_list_dict = self.multi_process_manager(data_dirs_split, config_preprocess) 
+        if config_preprocess.MULTI_PROCESS:
+            data_dirs_split = self.split_raw_data(data_dirs, begin, end)  # partition dataset 
+            file_list_dict = self.multi_process_manager(data_dirs_split, config_preprocess)
+        else:
+            file_list_dict = self.seq_list_dict(data_dirs,config_preprocess)
         self.build_file_list(file_list_dict)  # build file list
         self.load_preprocessed_data()  # load all data and corresponding labels (sorted for consistency)
-        logger.info(f"Total Number of raw files preprocessed:{len(data_dirs_split)}")
+        logger.info(f"Total Number of raw files preprocessed: {len(data_dirs_split)}")
 
     def preprocess(self, frames, bvps, config_preprocess):
         """Preprocesses a pair of data.
@@ -420,7 +425,7 @@ class BaseLoader(Dataset):
             count += 1
         return input_path_name_list, label_path_name_list
 
-    def multi_process_manager(self, data_dirs, config_preprocess, multi_process_quota=8):
+    def multi_process_manager(self, data_dirs, config_preprocess, multi_process_quota=2):
         """Allocate dataset preprocessing across multiple processes.
 
         Args:
@@ -436,11 +441,11 @@ class BaseLoader(Dataset):
         pbar = tqdm(list(choose_range))
 
         # shared data resource
+        lock = Lock()
         manager = Manager()  # multi-process manager
         file_list_dict = manager.dict()  # dictionary for all processes to store processed files
         p_list = []  # list of processes
         running_num = 0  # number of running processes
-        lock = Lock()
 
         # in range of number of files to process
         for i in choose_range:

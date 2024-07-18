@@ -46,13 +46,13 @@ class StudentLoader(BaseLoader):
         frames_clips, bvps_clips = self.preprocess(frames, bvps, config_preprocess)
         return frames_clips,bvps_clips
     
-    def __getitem__(self, index):
+    def _getitem__(self, index):
         """Returns a clip of video(3,T,W,H) and it's corresponding signals(T)."""
         item_path = self.inputs[index]["path"]
         data,_= self.preprocess_video(item_path,self.config_data.PREPROCESS)
         if data.shape[0] == 0:
             logger.info(f"NO VIDEOS PROCESSED - {data.shape[0]}")
-            return self.config_data.CACHED_PATH
+            return self.__getitem__((index - 1) % self.__len__())
   
         if self.data_format == 'NDCHW':
             data = np.transpose(data, (0,1, 4, 2, 3))
@@ -73,7 +73,7 @@ class StudentLoader(BaseLoader):
         
         return self.config_data.CACHED_PATH
     
-    def _getitem__(self, index):
+    def __getitem__(self, index):
         """Returns a clip of video(3,T,W,H) and it's corresponding signals(T)."""
         data = np.load(self.inputs[index])
         # label = np.load(self.labels[index])
@@ -94,29 +94,44 @@ class StudentLoader(BaseLoader):
         # item_path_filename is simply the filename of the specific clip
         # For example, the preceding item_path's filename would be 501_input0.npy
         item_path_filename = item_path.split(os.sep)[-1]
+        
         # split_idx represents the point in the previous filename where we want to split the string 
         # in order to retrieve a more precise filename (e.g., 501) preceding the chunk (e.g., input0)
-        split_idx = item_path_filename.rindex('_')
+        # split_idx = item_path_filename.rindex('_')
+        
         # Following the previous comments, the filename for example would be 501
-        filename = item_path_filename[:split_idx]
+        # filename = item_path_filename[:split_idx]
+        filename = item_path_filename
         # chunk_id is the extracted, numeric chunk identifier. Following the previous comments, 
         # the chunk_id for example would be 0
-        chunk_id = item_path_filename[split_idx + 6:].split('.')[0]
+        # chunk_id = item_path_filename[split_idx + 6:].split('.')[0]
+        chunk_id = filename.split('_')[-1].split('.npy')[0]
         return data, 1, filename, chunk_id
     
     def get_raw_data(self, data_path):
         """Returns data directories under the path(For UBFC-rPPG dataset)."""
-        data_dirs = sorted(glob.glob(data_path + os.sep + "subject*"))
+        processed = []
+        if os.path.exists(data_path.split('videos')[0] + os.sep + "processed_list.txt"):
+            with open(data_path.split('videos')[0] + os.sep + "processed_list.txt", "r") as f:
+                processed = [path.split(".mp4")[0].replace('\n','') for path in f.readlines()]
+        data_dirs = [
+            path 
+            for path in sorted(glob.glob(data_path + os.sep + "subject*"))
+            if path.split('.mp4')[0] not in processed
+        ]
         if not data_dirs:
             raise ValueError(self.dataset_name + " data paths empty!")
+
+        data_dirs = data_dirs[:1000]
         dirs = [
             {
             "index": idx,
             "path": data_dir
             } 
             for idx,data_dir in enumerate(data_dirs)
-            if "subject_122_g0eklav32n_vid_1_34.mp4" not in data_dir or "subject_74_65ovfrvz97_vid_2_31.mp4" not in data_dir
         ]
+        with open(data_path.split('videos')[0] + os.sep + "processed_list.txt", "a") as f:
+            f.write("\n".join(data_dirs)+'\n')
         return dirs
 
     def split_raw_data(self, data_dirs, begin, end):
@@ -150,9 +165,9 @@ class StudentLoader(BaseLoader):
             os.makedirs(self.cached_path, exist_ok=True)
         count = 0
         input_path_name_list = []
-        logger.info(f"FC - {frames_clips.shape} BC - {bvps_clips.shape}")
+        # logger.info(f"FC - {frames_clips.shape} BC - {bvps_clips.shape}")
         for i in range(len(bvps_clips)):
-            input_path_name = self.cached_path + os.sep + "{0}_input{1}.npy".format(filename, str(count))
+            input_path_name = self.cached_path + os.sep + "{}_{}.npy".format(filename, str(count))
             input_path_name_list.append(input_path_name)
             with lock:
                 np.save(input_path_name, frames_clips[i])
@@ -176,7 +191,7 @@ class StudentLoader(BaseLoader):
         input_path_name_list = []
         for i in range(len(bvps_clips)):
             assert (len(self.inputs) == len(self.labels))
-            input_path_name = self.cached_path + os.sep + "{0}_input{1}.npy".format(filename, str(count))
+            input_path_name = self.cached_path + os.sep + "{0}_input_{1}.npy".format(filename, str(count))
             input_path_name_list.append(input_path_name)
             np.save(input_path_name, frames_clips[i])
             count += 1
@@ -210,7 +225,8 @@ class StudentLoader(BaseLoader):
         """ 
         invoked by preprocess_dataset for multi_process.
         """
-        saved_filename = data_dirs[i]['index']
+        saved_filename = data_dirs[i]['path'].split(os.sep)[-1].replace('.mp4','')
+        # logger.info(f"SAVED FILENAME - {data_dirs[i]}")
         # Read Frames
         frames = self.read_video(data_dirs[i]['path'])
         bvps = np.ones(frames.shape[0])
